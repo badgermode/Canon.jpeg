@@ -1,0 +1,28 @@
+{
+  "code": "PORTRA400",
+  "name": "Kodak Portra 400",
+  "short_name": "PORTRA 400",
+  "type": "colour-negative",
+  "description": "Soft contrast, gentle pastel colour, warm natural skin, fine grain.",
+  "camera": {
+    "iso": 400,
+    "white_balance": "daylight"
+  },
+  "lab": {
+    "white_balance": { "warmth": 0.03, "tint": 0.0 },
+    "colour_mix": [
+      [1.02, -0.01, -0.01],
+      [-0.02, 1.0, 0.02],
+      [0.0, -0.02, 1.02]
+    ],
+    "tone": {
+      "curve": [[0, 0.035], [0.15, 0.165], [0.35, 0.365], [0.5, 0.505], [0.7, 0.695], [0.88, 0.85], [1, 0.955]],
+      "red": [[0, 0], [0.5, 0.51], [1, 1]],
+      "blue": [[0, 0.01], [0.5, 0.49], [1, 0.98]]
+    },
+    "shadows": { "hue": 190, "amount": 0.02 },
+    "highlights": { "hue": 40, "amount": 0.02 },
+    "saturation": 0.9,
+    "grain": { "amount": 0.3, "size": 1.3 }
+  }
+}

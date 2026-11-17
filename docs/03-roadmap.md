@@ -13,7 +13,7 @@ The roadmap is in two phases because the camera hasn't arrived yet:
 | # | Milestone | Needs | Result |
 |---|---|---|---|
 | **Phase 1** | | | |
-| 1 | Film Lab v0.1 on your phone | Phone | One film look + contact sheet from photos you pick |
+| 1 | Film Lab v0.1 on your phone ✅ built, awaiting your test | Phone | One film look + contact sheet from photos you pick |
 | 2 | Phone file handling | Phone, card reader | We know how rolls get in and out on your phone |
 | 3 | Camera simulator + roll logic | Nothing | The camera script's "brain" proven virtually |
 | 4 | Virtual end-to-end | Phone | A simulated roll developed on your phone |
@@ -45,6 +45,11 @@ with **one** recipe (Portra 400), cropped to 3:2, with a plain contact sheet.
 - **You:** switch on GitHub Pages for the repository (I'll explain the setting), open the link on
   your phone, add it to your home screen, and develop a handful of ordinary phone photos.
 - **Done when:** you have developed photos and a contact sheet on your own phone.
+
+**Status:** built and passing its automated tests in an emulated phone. Setup steps are in
+[guide-film-lab.md](guide-film-lab.md). Beyond the plan, v0.1 already has light grain (scaled to
+the photo's size), "hold to see original", and works offline; Milestone 5 refines grain and adds
+halation.
 
 ## Milestone 2 — Phone file handling
 

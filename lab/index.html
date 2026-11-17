@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#141110">
+  <meta name="description" content="Develops rolls of digital film: film looks and contact sheets, entirely on your phone.">
+  <title>Film Lab</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <h1>Film Lab</h1>
+    <p class="sub">Develop a roll</p>
+  </header>
+
+  <main>
+    <!-- 1. Load: choose a film and the photos -->
+    <section id="load" class="screen">
+      <h2>1 · Film</h2>
+      <div id="film-list" class="film-list" role="radiogroup" aria-label="Film"></div>
+
+      <h2>2 · Photos</h2>
+      <label class="button secondary file-button">
+        <input id="file-input" type="file" accept="image/jpeg,image/*" multiple>
+        <span id="file-label">Choose photos</span>
+      </label>
+      <p id="file-note" class="note">Pick the photos from one roll. They're developed in name order.</p>
+
+      <button id="develop-button" class="button primary" disabled>Develop roll</button>
+      <p class="note small">Your photos stay on this phone. Nothing is uploaded.</p>
+    </section>
+
+    <!-- 2. Developing -->
+    <section id="developing" class="screen" hidden>
+      <div class="safelight" aria-hidden="true"></div>
+      <h2 id="progress-text">Developing…</h2>
+      <div class="progress"><div id="progress-bar"></div></div>
+      <p class="note">Keep the Lab open until the roll is finished.</p>
+    </section>
+
+    <!-- 3. The developed roll -->
+    <section id="results" class="screen" hidden>
+      <h2 id="roll-title"></h2>
+      <p id="roll-note" class="note"></p>
+      <img id="contact-sheet" class="contact-sheet" alt="Contact sheet">
+      <div class="actions">
+        <button id="save-zip" class="button primary">Save roll (ZIP)</button>
+        <button id="save-sheet" class="button secondary">Save contact sheet</button>
+      </div>
+      <h2>Frames</h2>
+      <div id="frames" class="frames"></div>
+      <button id="new-roll" class="button secondary">Develop another roll</button>
+    </section>
+  </main>
+
+  <!-- Full-screen viewer for one frame -->
+  <div id="viewer" class="viewer" hidden>
+    <div class="viewer-bar">
+      <span id="viewer-count"></span>
+      <button id="viewer-close" class="icon-button" aria-label="Close">✕</button>
+    </div>
+    <img id="viewer-image" alt="">
+    <div class="viewer-bar bottom">
+      <button id="viewer-prev" class="icon-button" aria-label="Previous frame">‹</button>
+      <button id="viewer-compare" class="button secondary small">Hold to see original</button>
+      <button id="viewer-save" class="button secondary small">Save</button>
+      <button id="viewer-next" class="icon-button" aria-label="Next frame">›</button>
+    </div>
+  </div>
+
+  <footer class="foot"><span id="version"></span> · <span id="offline-status"></span></footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

@@ -8,8 +8,11 @@ The limitations are the point.
 
 ## Status
 
-**Planning complete; nothing built yet.** The camera has been bought but has not arrived, so the
-first phase of work is everything that can be built and tested without it.
+**Milestone 1 built — waiting for you to try it on your phone.** The camera has been bought but
+has not arrived, so the first phase of work is everything that can be built and tested without it.
+
+- **Film Lab v0.1** (in `lab/`): one film (Kodak Portra 400), 3:2 framing, grain, contact sheet,
+  save as ZIP, works offline. Set it up with the [phone guide](docs/guide-film-lab.md).
 
 ## How it will work
 
@@ -39,6 +42,16 @@ first phase of work is everything that can be built and tested without it.
 | Camera ISO | Locked to the film's ISO |
 | Shape of a full-frame photo | Cropped to 35mm's 3:2 |
 
+## In this repository
+
+| Folder | Contents |
+|---|---|
+| `docs/` | Planning documents and guides |
+| `lab/` | The Film Lab web app (plain HTML and JavaScript) |
+| `films/` | The film catalogue and recipes — [what each setting means](films/README.md) |
+| `tests/` | Automated tests |
+
 ## Next step
 
-Milestone 1: Film Lab v0.1 on your phone — one film look and a contact sheet from photos you pick.
+Follow the [phone guide](docs/guide-film-lab.md) to switch on GitHub Pages, install the Lab, and
+develop a test roll. Then Milestone 2: settling how rolls get in and out on your phone.

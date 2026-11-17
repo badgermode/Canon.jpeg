@@ -7,12 +7,12 @@ needs your approval first.
 
 | Feature | Why not | What we do instead |
 |---|---|---|
-| Applying the full film look inside the camera | A script cannot reach Canon's JPEG processing or edit a saved JPEG, and the camera lacks the speed and memory to do it in a script | The Film Lab on your computer |
+| Applying the full film look inside the camera | A script cannot reach Canon's JPEG processing or edit a saved JPEG, and the camera lacks the speed and memory to do it in a script | The Film Lab on your phone |
 | Contact sheet made on the camera | Same reason — it would mean decoding and shrinking 36 JPEGs | The Film Lab |
 | Seeing the film look on the LCD while composing | The live view comes straight from Canon's firmware | Accept it — a film camera's viewfinder doesn't show the film's look either |
 | A live "ghost" of the first exposure when lining up a double exposure | Needs custom compiled code; exists in a CHDK fork for other models, not the A590 | Compose from memory, as on a film camera |
 | Blocking the playback switch, mode dial or power button | They are physical controls outside CHDK's button handling | Detect them and respond (hide photos, blank the screen, show a warning) |
-| A lock that can't be defeated | The card can always be taken out and read on a computer | Aim for "the camera never shows you", not "cheating is impossible" |
+| A lock that can't be defeated | The card can always be taken out and read on another device | Aim for "the camera never shows you", not "cheating is impossible" |
 | Framing lines in the optical viewfinder | It is glass, not a screen | Framing guides on the LCD; or a DIY mask on the viewfinder window |
 | True ISO 50 for Velvia | The sensor's lowest setting is ISO 80 | Shoot at 80 |
 | Real film's forgiveness of overexposure | A JPEG clips bright areas for good; negative film keeps detail there | Imitate the look of film highlights; possibly a slight built-in underexposure; RAW as a later experiment |
@@ -39,6 +39,18 @@ Ordered roughly by how much they could affect the design.
 | **Mode dial in the wrong position** | In Auto or scene modes the camera ignores ISO/white-balance settings | Detect and show "set dial to P" |
 | **Wrong clock** | If the camera's small internal clock battery is dead, dates reset | Rolls are identified by number, not only by date |
 
+### Specific to developing on the phone
+
+| Feature | The difficulty | Fallback |
+|---|---|---|
+| **Picking a roll folder in one tap** | Folder access for web pages arrived on Android only recently and is reported to be rough | Select all the files in the folder with the ordinary picker |
+| **Saving a named folder of photos** | Same limitation, for writing | Save one ZIP per roll; or share to the gallery |
+| **Phone memory** | An 8-megapixel photo is large once unpacked; a browser tab that uses too much memory is closed by Android | Process one photo at a time; release each before the next |
+| **Long jobs** | Android may pause a web page if the screen turns off or you switch apps mid-roll | Keep the screen awake while developing; make developing resumable |
+| **Reading the SD card** | Depends on the phone supporting USB storage and on the card reader | Copy the roll folder to the phone via the PC |
+| **Keeping photo details** | Re-saving a photo in a browser drops its embedded data (date taken, exposure settings) | Copy that data across from the original file |
+| **Feels less like an "app"** | It runs in Chrome rather than being installed from an app store | "Add to Home screen" gives it its own icon and full-screen window |
+
 ## C. Risks, and what needs your approval
 
 You asked me not to do anything risky without explaining it and getting your agreement. These are
@@ -48,7 +60,7 @@ the points where I will stop and ask.
 
 | Action | Risk | Mitigation |
 |---|---|---|
-| **Installing CHDK** (Milestone 1) | **Low.** CHDK runs from the SD card in temporary memory and does not overwrite Canon's firmware; removing the card restores the stock camera. The CHDK project reports no verified cases of damage, but it comes with no warranty and is not endorsed by Canon | Use the official build for your exact firmware version. If the camera ever freezes: remove the batteries |
+| **Installing CHDK** (Milestone 7) | **Low.** CHDK runs from the SD card in temporary memory and does not overwrite Canon's firmware; removing the card restores the stock camera. The CHDK project reports no verified cases of damage, but it comes with no warranty and is not endorsed by Canon | Use the official build for your exact firmware version. If the camera ever freezes: remove the batteries |
 | **Preparing the SD card** | The card is **completely erased**. On a computer, choosing the wrong drive in a card tool could erase a different disk | Use a dedicated card. I'll give explicit "check the drive letter" steps |
 | **Scripts that move and rename photo files** | A bug could misplace photos on the card | Dedicated card with nothing precious on it; the script never deletes; tested in the simulator first |
 | **Scripts that operate the lens** (zoom) | CHDK's FAQ notes that damage, while unlikely, is theoretically possible through scripts or overrides that drive the camera beyond Canon's normal limits | We only pass on your own zoom presses, within Canon's normal range. No exposure or focus overrides beyond normal settings |
@@ -57,6 +69,11 @@ the points where I will stop and ask.
 A note on wording: CHDK can be started from a Canon menu entry called **"Firm Update"**. Despite
 the name, this does *not* update or replace the firmware — it loads CHDK temporarily. I'll point
 this out again when we get there.
+
+One further step needs your decision rather than carrying risk to the camera: **switching on
+GitHub Pages** so the Lab can be opened on your phone. It makes the Lab's web page publicly
+reachable by anyone with the link. The page contains only the app, never your photos, and the
+repository is already public — but it is your repository, so I'll ask first.
 
 ### Things deliberately *not* in the plan
 
@@ -73,6 +90,6 @@ I will not use any of these without a separate explanation and your explicit app
 
 - The **experience** (loading, locking, counting, waiting) lives on the camera and is very likely
   achievable in full.
-- The **look** arrives when you develop the roll on your computer — never on the camera's screen.
+- The **look** arrives when you develop the roll on your phone — never on the camera's screen.
 - A few details (how photos are hidden, how the counter is displayed, how the shutter is driven)
   will be settled by testing on your camera, and each already has a fallback.

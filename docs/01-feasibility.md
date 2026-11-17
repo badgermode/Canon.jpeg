@@ -1,6 +1,7 @@
 # 1. Technical feasibility assessment
 
-*Investigated 17 November 2026. No code has been written and nothing has been done to the camera.*
+*Investigated 17 November 2026. No project code has been written and nothing has been done to the
+camera, which has not arrived yet.*
 
 ## The short answer
 
@@ -8,7 +9,7 @@
 
 1. **The camera** (CHDK + a Lua script) handles the *experience*: loading a film, locking it in,
    counting exposures, hiding your photos until the roll is done, and recording what you shot.
-2. **The Film Lab** (a small program on your computer) handles the *look*: it "develops" a finished
+2. **The Film Lab** (a web app on your Android phone) handles the *look*: it "develops" a finished
    roll by applying the film recipe, grain, half-frame layout and double exposures, and produces the
    named roll folder and contact sheet.
 
@@ -24,6 +25,7 @@ you can't see anything, you take it to the lab, and you get back photographs and
 | **CHDK 1.6.1 source code** (a mirror of the official repository) — I read the A590 port and the Lua engine directly | Exactly which firmware versions are supported, which buttons CHDK can see, and the complete list of Lua functions that exist |
 | Canon specifications and published reviews | The camera's hardware |
 | Web search summaries of the CHDK wiki and FAQ | Installation method, safety statements |
+| A measurement I ran in an emulated phone browser | Whether a phone can develop 8-megapixel photos at a practical speed |
 
 Two honest limits:
 
@@ -119,7 +121,7 @@ All ✅ confirmed to exist in CHDK 1.6.1. Whether each behaves on the A590 is �
 | Half-frame format | ✅ Feasible | Counter runs to double length (48/72); portrait framing guide on LCD 🧪; Lab crops and pairs frames side-by-side |
 | Double / multiple exposures | ✅ Feasible **in the Lab** | Camera records "these captures are one frame" and doesn't advance the counter; Lab blends them like light adding up on film |
 | …blended inside the camera | 🧪 Uncertain, slow | Possible in theory via CHDK RAW merge + RAW develop. Stretch goal only |
-| Finished roll in its own named folder | ✅ Feasible | Short folder name on the card (e.g. `R0007`); descriptive name on the computer |
+| Finished roll in its own named folder | ✅ Feasible | Short folder name on the card (e.g. `R0007`); descriptive name given by the Lab |
 | Contact sheet | ✅ Feasible **in the Lab** | ❌ not on the camera |
 | Ten distinct film looks | ✅ Feasible **in the Lab** | Full control of colour, contrast, saturation, grain, halation |
 | Film look applied inside the camera | ❌ / 🧪 Very limited | Only Canon's My Colors, white balance, and experimental CHDK curves |
@@ -138,14 +140,14 @@ Because playback is a physical switch, a script can't simply ignore it. Instead,
    screen. 🧪
 
 If layer 2 misbehaves, layers 1 and 3 still deliver the experience. None of this is tamper-proof —
-you can always pull the card and put it in a computer. The aim is that *the camera* never shows you
+you can always pull the card and read it on another device. The aim is that *the camera* never shows you
 the photo, not that it is impossible to cheat.
 
 ## Three ways to get a film look, compared
 
 | Approach | Quality | Effort | Verdict |
 |---|---|---|---|
-| **A. Film Lab on the computer** — process the JPEG after the roll is finished | High. Full control over tone curves, colour, saturation, grain, halation | Moderate; can be built and tested without the camera | **Recommended. The plan is built on this.** |
+| **A. Film Lab on your phone** — process the JPEG after the roll is finished | High. Full control over tone curves, colour, saturation, grain, halation | Moderate; can be built and tested without the camera | **Recommended. The plan is built on this.** |
 | **B. Canon settings in-camera** — lock white balance, optionally My Colors contrast/saturation | Low. A handful of coarse steps; cannot tell Portra from Pro 400H | Small | Use **white balance lock only**, because it is authentic: daylight film under indoor bulbs *should* go orange |
 | **C. CHDK curves in-camera** — tone curves applied to the sensor data before Canon makes the JPEG | Unknown. Works on raw sensor colours, so hard to design for | High; needs lots of on-camera trial | Stretch experiment, after everything else works |
 
@@ -154,9 +156,64 @@ film, which is famous for forgiving overexposure. The Lab can imitate the *look*
 but cannot recover detail the JPEG has already thrown away. A small built-in underexposure, or
 optional RAW capture later, can soften this.
 
+## Developing on an Android phone
+
+You asked for the "developing" step to run on your phone rather than a PC. **This is feasible, and
+I recommend building the Lab as a web app that runs in Chrome** (the reasoning and the alternatives
+are in the architecture document).
+
+- ✅ **Speed is fine.** I ran a film-recipe-sized workload on an A590-sized photo in an emulated
+  phone browser with the processor slowed to imitate modest phones: between 0.3 and 1.6 seconds
+  per photo, so roughly a minute or less per 36-exposure roll. Real recipes will be heavier, and
+  emulation is only an estimate, but there is a wide margin.
+- ✅ **A web page can read photos you select and save results** on Android — this has worked for
+  years.
+- ✅ **It can be installed to the home screen and work offline.** The repository is public, so
+  GitHub can host it for free.
+- 🧪 **Picking a whole folder and saving a named folder** became possible in Chrome for Android
+  only recently (version 132, early 2025), and reports suggest folder handling was still rough.
+  The Lab will therefore have a dependable baseline — select the files, save a ZIP — and use the
+  smoother route where your phone supports it.
+- ✅ **Your photos never leave the phone.** All processing happens on the device.
+
+### What must be tested on your phone
+
+Unlike the camera, you have the phone now, so these can be answered early (Milestones 1 and 2).
+
+| # | Question | If it fails |
+|---|---|---|
+| P1 | Does the phone read a small FAT16 SD card through a USB-C reader? | Copy the roll folder across via the PC |
+| P2 | Can the Lab pick a whole roll folder, or must the files be selected? | Select all files in the folder (a few taps) |
+| P3 | Can the Lab save a named folder of photos, or only a ZIP? | Save a ZIP per roll |
+| P4 | How long does a real 36-photo roll take, and does the phone's memory cope? | Process at reduced size; lighter grain |
+| P5 | Does the installed app work with no internet connection? | Use it online |
+
+## What can be tested without the camera
+
+**More than half the project.** I found no emulator that can run the A590's firmware — the
+mainstream emulator's Canon support covers a single different model and cannot run Canon's
+firmware — so the camera itself cannot be simulated in full. But most of the project does not
+need it:
+
+| Part | Testable now? | How |
+|---|---|---|
+| The Film Lab: recipes, grain, formats, double exposures, contact sheet | ✅ Fully | On your phone, and automatically in an emulated phone browser. It only needs JPEGs |
+| Camera script logic: loading, locking, counting, manifests, rewind, power-loss recovery | ✅ Fully | In a simulator. CHDK's source includes a desktop build of the same Lua engine the camera uses, intended for testing scripts off-camera |
+| The whole chain: shoot a roll → develop it | ✅ Virtually | The simulator produces the same folder layout as a real card; the Lab develops it |
+| Camera behaviour: shutter feel, screen flicker, hiding files from Canon's playback, whether locked settings stick | ❌ Camera only | Tests T1–T14 |
+| Final recipe tuning | ⚠️ Partly | Needs real A590 photos — the sensor's colour and noise shape the result |
+
+**Does waiting for the camera slow us down?** Not much, provided we work in the right order: the
+Lab and the script's logic first, the camera-dependent parts last. The real cost is uncertainty
+rather than time — three design choices (control style, how photos are hidden, how the counter is
+shown) stay open until the camera is tested, so I will keep those parts thin and swappable instead
+of polishing something that might need redoing. One risk cannot be reduced in advance: if the
+camera turns out to have unsupported firmware, the camera side needs a rethink. That check takes
+five minutes on the day it arrives.
+
 ## What must be tested on your camera
 
-Each of these becomes a tiny, single-purpose test script in Milestone 2. You run it, it writes
+Each of these becomes a tiny, single-purpose test script in Milestone 8. You run it, it writes
 PASS/FAIL details to a text file, and you send me the file.
 
 | # | Question | If it fails |
